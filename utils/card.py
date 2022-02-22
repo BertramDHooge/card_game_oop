@@ -27,20 +27,20 @@ class Card:
         :return: A str representing our Card, printing both the card type and
         value of the Card.
         """
-        return f"{self.value} of {self.card_type}"
+        return f"{self.card_type} {self.value}"
 
 class Deck:
     """
     Class that describes a Deck of Cards
     """
 
-    def __init__(self):
+    def __init__(self, cards: List[Card] = []):
         """
         Function that will initialise a new instance of Deck. A Deck will
         allways be initialised with an empty list of Cards
         """
 
-        self.cards = []
+        self.cards = cards
 
     @classmethod
     def create_deck(cls, first_card_attribute: List[str], second_card_attribute:

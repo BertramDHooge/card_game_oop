@@ -7,7 +7,7 @@ class Board():
     Class that describes a (game)board upon which a game can be played.
     """
 
-    def __init__(self, players: List[Player]):
+    def __init__(self, players: List[Player], deck: Deck = Deck()):
         """
         Function that will initialise a new instance of Board.
 
@@ -18,16 +18,17 @@ class Board():
         self.turn_count = 0
         self.active_cards = []
         self.history_cards = []
+        self.deck = deck
 
     def start_game(self):
         """
         Function that will start the game that we will be playing at our Board.
         """
 
-        deck = Deck()
-        deck.fill_deck_default()
+        if self.deck.cards == []:
+            self.deck.fill_deck_default()
 
-        decks = deck.distribute(len(self.players))
+        decks = self.deck.distribute(len(self.players))
 
         for index in range(len(self.players)):
             self.players[index].cards = decks[str(index)]
