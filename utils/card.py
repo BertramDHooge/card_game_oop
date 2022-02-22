@@ -25,6 +25,7 @@ class Symbol:
 
         return self.icon
 
+
 class Card(Symbol):
     """
     Class that describes a Card.
@@ -37,7 +38,7 @@ class Card(Symbol):
 
         :param color: The color of the Symbol, default either red or black
         :param icon: The icon for the Symbol, default one of [♥, ♦, ♣, ♠]
-        :param : The value of the Card, default one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K]
+        :param value: The value of the Card, default one of [A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K]
         """
 
         Symbol.__init__(self, color, icon)

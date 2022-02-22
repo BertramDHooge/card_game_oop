@@ -3,6 +3,7 @@ from typing import List
 from random import choice, shuffle
 from itertools import islice
 
+
 class Player:
     """
     Class that describes a Player
@@ -13,7 +14,7 @@ class Player:
         Function that will initialise a new instance of Person
 
         :param name: The name of our Player
-        :param cards: A list of Cards our Player currently has acces to
+        :param cards: A list of Cards our Player currently has access to
         """
 
         self.name = name
@@ -49,6 +50,7 @@ class Player:
 
         return f"{self.name} with {len(self.cards)} cards in hand and {len(self.history)} cards played"
 
+
 class Deck:
     """
     Class that describes a Deck of Cards
@@ -67,7 +69,30 @@ class Deck:
         Function that will fill the current deck with a standard list of Cards.
         """
 
-        self.cards = [Card(color, icon, value) for (color, icon) in [("black","♣"), ("black", "♠"), ("red", "♥"), ("red", "♦")] for value in["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]]
+        self.cards = [
+            Card(color, icon, value)
+            for (color, icon) in [
+                ("black", "♣"),
+                ("black", "♠"),
+                ("red", "♥"),
+                ("red", "♦"),
+            ]
+            for value in [
+                "A",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "10",
+                "J",
+                "Q",
+                "K",
+            ]
+        ]
 
     def shuffle(self):
         """
@@ -84,7 +109,13 @@ class Deck:
         """
 
         for index in range(len(players)):
-            players[index].cards = list(islice(self.cards, index * (len(self.cards) // len(players)), (index + 1) * (len(self.cards) // len(players))))
+            players[index].cards = list(
+                islice(
+                    self.cards,
+                    index * (len(self.cards) // len(players)),
+                    (index + 1) * (len(self.cards) // len(players)),
+                )
+            )
 
     def __str__(self) -> str:
         """

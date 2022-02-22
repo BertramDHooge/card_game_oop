@@ -2,7 +2,8 @@ from utils.player import Player
 from typing import List
 from utils.player import Deck
 
-class Board():
+
+class Board:
     """
     Class that describes a (game)board upon which a game can be played.
     """
