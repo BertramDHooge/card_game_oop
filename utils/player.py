@@ -1,28 +1,30 @@
-from utils.card import Card
+from utils.card import Card, Deck
 from typing import List
 from random import choice, shuffle
 from itertools import islice
+
 
 class Player:
     """
     Class that describes a Player
     """
 
-    def __init__(self, name: str, cards: List[Card]):
+    def __init__(self, name: str, hand: Deck, is_ai=True):
         """
         Function that will initialise a new instance of Person
 
         :param name: The name of our Player
-        :param cards: A list of Cards our Player currently has acces to
+        :param hand: The Deck of Cards our Player has access to
         """
 
         self.name = name
-        self.cards = cards
+        self.hand = hand
         self.turn_count = 0
         self.number_of_cards = 0
         self.history = []
+        self.is_ai = is_ai
 
-    def play(self) -> Card:
+    def play(self, card: Card = None) -> Card:
         """
         Function that will play a random card from cards. This will also remove
         this card from cards while adding it to history and print a small
@@ -31,13 +33,15 @@ class Player:
         :return: The card that was just played
         """
 
-        random_card = choice(self.cards)
-        self.cards.remove(random_card)
-        self.history.append(random_card)
+        if card is None or card not in self.hand.cards:
+            card = choice(self.hand.cards)
+
+        self.hand.cards.remove(card)
+        self.history.append(card)
         self.turn_count += 1
 
-        print(f"{self.name} {self.turn_count} played {random_card}")
-        return random_card
+        print(f"{self.name} {self.turn_count} played {card}")
+        return card
 
     def __str__(self) -> str:
         """
@@ -47,4 +51,4 @@ class Player:
                     amount of cards in their hand, and amount of cards played so far.
         """
 
-        return f"{self.name} with {len(self.cards)} cards in hand and {len(self.history)} cards played"
+        return f"{self.name} with {len(self.hand.cards)} cards in hand and {len(self.history)} cards played"

@@ -1,8 +1,9 @@
 from utils.player import Player
 from typing import List
-from utils.card import Deck
+from utils.card import Deck, Card, UnoCard
+from random import shuffle, choice
 
-class Board():
+class Board:
     """
     Class that describes a (game)board upon which a game can be played.
     """
@@ -31,11 +32,11 @@ class Board():
         decks = self.deck.distribute(len(self.players))
 
         for index in range(len(self.players)):
-            self.players[index].cards = decks[str(index)]
+            self.players[index].hand.cards = decks[str(index)]
 
         self.history_cards = decks["deck"]
 
-        while len(self.players[0].cards) > 0:
+        while len(self.players[0].hand.cards) > 0:
             self.history_cards += self.active_cards
             self.active_cards = []
             self.turn_count += 1
@@ -55,3 +56,61 @@ class Board():
         """
 
         return f"Turn {self.turn_count}: currently {[card.__str__() for card in self.active_cards]} are in the game and {len(self.history_cards)} cards have been played in earlier turns\n"
+
+
+class UnoBoard(Board):
+    def __init__(self, players: List[Player]):
+        self.active_card = None
+        self.order = 1
+        self.deck = Deck()
+
+
+        self.deck.cards = [
+            UnoCard(card.card_type, card.value)
+            for card in Deck.create_deck(
+                ["red", "green", "yellow", "blue"],
+                [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "+2",
+                    "Reverse turn order",
+                    "Skip turn",
+                ],
+                [Card("Special", "+4"), Card("Special", "Change color")],
+            )
+        ]
+        super().__init__(players, deck)
+
+    def start_game(self):
+
+        decks = self.deck.distribute(len(self.players), 7)
+        shuffle(self.players)
+        active_player = 0
+
+        for index in range(len(self.players)):
+            self.players[index].hand.cards = decks[str(index)]
+
+        while True:
+            player = self.players[active_player]
+            legal_plays = [card for card in player.hand.cards if card.is_legal_play(self.active_card)]
+            if player.is_ai and legal_plays != []:
+                self.active_card = player.play(choice(legal_plays))
+
+        while len(self.players[0].hand.cards) > 0:
+            self.history_cards += self.active_cards
+            self.active_cards = []
+            self.turn_count += 1
+
+            for current_player in self.players:
+                self.active_cards.append(current_player.play())
+
+            print(self)
+
+

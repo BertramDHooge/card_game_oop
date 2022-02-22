@@ -29,6 +29,22 @@ class Card:
         """
         return f"{self.card_type} {self.value}"
 
+
+class UnoCard(Card):
+    def __init__(self, card_type: str, value: str):
+
+        super().__init__(card_type, value)
+
+    def is_legal_play(self, card: Card) -> bool:
+
+        return (
+            self.card_type == "Special"
+            or card is None
+            or self.card_type == card.card_type
+            or self.value == card.value
+        )
+
+
 class Deck:
     """
     Class that describes a Deck of Cards
@@ -43,8 +59,12 @@ class Deck:
         self.cards = cards
 
     @classmethod
-    def create_deck(cls, first_card_attribute: List[str], second_card_attribute:
-                    List[str], additionally: List[Card] = []) -> List[Card]:
+    def create_deck(
+        cls,
+        first_card_attribute: List[str],
+        second_card_attribute: List[str],
+        additionally: List[Card] = [],
+    ) -> List[Card]:
         """
         Class method that creates a deck of cards from 2 lists of attributes
         and adds any additional cards specified, either to generate duplicates
@@ -64,34 +84,24 @@ class Deck:
         adding the additional cards represented as a list of cards.
         """
 
-        deck = [Card(icon, value) for icon in first_card_attribute
-                                        for value in second_card_attribute]
+        deck = [
+            Card(card_type, value)
+            for card_type in first_card_attribute
+            for value in second_card_attribute
+        ]
         deck += additionally
 
         return deck
 
-
-
-    def fill_deck_default(self, decktype: str = ""):
+    def fill_deck_default(self,):
         """
         Function that will fill the current deck with a standard list of Cards.
-
-        :param decktype: The type of default deck you want to generate.
-                            Currently supported:
-                                - standard 52 card deck ('std', 'standard' or no value),
-                                - Uno ('uno')
         """
 
-        if decktype == "" or decktype.lower() == "std" or decktype.lower() == "standard":
-            self.cards = Deck.create_deck(["♣", "♠", "♥", "♦"],
-                                          ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"])
-
-        elif decktype.lower() == "uno":
-            self.cards = Deck.create_deck(["red", "green", "yellow", "blue"],
-                                         ["1", "2", "3", "4", "5", "6", "7", "8", "9", "+2", "Reverse turn order", "Skip turn"],
-                                         [Card("Special", "+4"), Card("Special", "Change color")])
-
-
+        self.cards = Deck.create_deck(
+            ["♣", "♠", "♥", "♦"],
+            ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"],
+        )
 
     def shuffle(self):
         """
@@ -100,7 +110,9 @@ class Deck:
 
         shuffle(self.cards)
 
-    def distribute(self, amount_of_players: int, max_cards_per_player: int = -1) -> Dict[str, List[Card]]:
+    def distribute(
+        self, amount_of_players: int, max_cards_per_player: int = -1
+    ) -> Dict[str, List[Card]]:
         """
         Function that will distribute the current Deck of Cards among a
         specified amount of players. Either dividing equally untill the deck
@@ -120,14 +132,22 @@ class Deck:
         if max_cards_per_player < 0:
             max_cards_per_player = len(self.cards) // amount_of_players
 
-        divided = {str(player): list(islice(self.cards,
-                                       player * max_cards_per_player,
-                                       (player+1) * max_cards_per_player))
-                   for player in range(amount_of_players)}
+        divided = {
+            str(player): list(
+                islice(
+                    self.cards,
+                    player * max_cards_per_player,
+                    (player + 1) * max_cards_per_player,
+                )
+            )
+            for player in range(amount_of_players)
+        }
 
-        divided["deck"] = list(islice(self.cards,
-                                      len(self.cards) - max_cards_per_player * amount_of_players
-                                      ))
+        divided["deck"] = list(
+            islice(
+                self.cards, len(self.cards) - max_cards_per_player * amount_of_players
+            )
+        )
 
         return divided
 
