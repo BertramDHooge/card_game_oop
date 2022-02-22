@@ -1,5 +1,5 @@
 from itertools import islice
-from typing import List
+from typing import List, Dict
 from random import shuffle
 
 
@@ -72,8 +72,6 @@ class Deck:
 
 
 
-
-
     def fill_deck_default(self, decktype: str = ""):
         """
         Function that will fill the current deck with a standard list of Cards.
@@ -102,8 +100,7 @@ class Deck:
 
         shuffle(self.cards)
 
-    def distribute(self, amount_of_players: int, max_cards_per_player: int =
-                   -1) -> dict[str, List[Card]]:
+    def distribute(self, amount_of_players: int, max_cards_per_player: int = -1) -> Dict[str, List[Card]]:
         """
         Function that will distribute the current Deck of Cards among a
         specified amount of players. Either dividing equally untill the deck

@@ -1,6 +1,6 @@
 from utils.player import Player
 from typing import List
-from utils.player import Deck
+from utils.card import Deck
 
 class Board():
     """
@@ -25,8 +25,14 @@ class Board():
         """
 
         deck = Deck()
-        deck.fill_deck()
-        deck.distribute(self.players)
+        deck.fill_deck_default()
+
+        decks = deck.distribute(len(self.players))
+
+        for index in range(len(self.players)):
+            self.players[index].cards = decks[str(index)]
+
+        self.history_cards = decks["deck"]
 
         while len(self.players[0].cards) > 0:
             self.history_cards += self.active_cards
