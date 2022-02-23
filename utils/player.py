@@ -34,9 +34,10 @@ class Player:
         """
 
         if card is None or card not in self.hand.cards:
-            card = choice(self.hand.cards)
+            card = self.hand.draw()
+        else:
+            self.hand.cards.remove(card)
 
-        self.hand.cards.remove(card)
         self.history.append(card)
         self.turn_count += 1
 

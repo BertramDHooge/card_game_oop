@@ -30,6 +30,7 @@ if game_input.lower() != "standard" and game_input.lower() != "uno":
     game = Board(players, deck)
 
 else:
+    players[0].is_ai = input("Do you want to play yourself?(y/n)").lower() == "n"
 
     game = UnoBoard(players)
 

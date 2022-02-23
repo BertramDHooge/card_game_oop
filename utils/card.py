@@ -1,6 +1,6 @@
 from itertools import islice
 from typing import List, Dict
-from random import shuffle
+from random import shuffle, choice
 
 
 class Card:
@@ -109,6 +109,11 @@ class Deck:
         """
 
         shuffle(self.cards)
+
+    def draw(self) -> Card:
+        card = choice(self.cards)
+        self.cards.remove(card)
+        return card
 
     def distribute(
         self, amount_of_players: int, max_cards_per_player: int = -1
