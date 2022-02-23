@@ -4,6 +4,7 @@ from utils.card import Deck, Card, UnoCard
 from random import shuffle, choice
 from time import sleep
 
+
 class Board:
     """
     Class that describes a (game)board upon which a game can be played.
@@ -29,7 +30,7 @@ class Board:
 
         if self.deck.cards == []:
             self.deck.fill_deck_default()
-        
+
         deck.shuffle()
         decks = self.deck.distribute(len(self.players))
 
@@ -65,7 +66,6 @@ class UnoBoard(Board):
         self.active_card = None
         self.order = 1
         self.deck = Deck()
-
 
         self.deck.cards = [
             UnoCard(card.card_type, card.value)
@@ -110,11 +110,17 @@ class UnoBoard(Board):
                 active_player += len(self.players)
 
             player = self.players[active_player]
-            print(f"\nTurn {self.turn_count}: {player.name} is on the play with {len(player.hand.cards)} cards in hand.")
+            print(
+                f"\nTurn {self.turn_count}: {player.name} is on the play with {len(player.hand.cards)} cards in hand."
+            )
             if self.active_card is not None:
                 print(f"The active card is {self.active_card}")
 
-            legal_plays = [card for card in player.hand.cards if card.is_legal_play(self.active_card)]
+            legal_plays = [
+                card
+                for card in player.hand.cards
+                if card.is_legal_play(self.active_card)
+            ]
 
             if player.is_ai:
                 if legal_plays != []:
@@ -126,12 +132,16 @@ class UnoBoard(Board):
                     continue
             else:
 
-                print("Your turn! Please select a legal card to play, otherwise, draw a card")
+                print(
+                    "Your turn! Please select a legal card to play, otherwise, draw a card"
+                )
                 print("Your hand: ")
                 print([card.__str__() for card in player.hand.cards])
                 if legal_plays == []:
 
-                    print("You don't seem to have any legal plays right now. Draw a card.")
+                    print(
+                        "You don't seem to have any legal plays right now. Draw a card."
+                    )
                     input("Press Enter to continue...")
                     player.hand.cards.append(self.deck.draw())
                     active_player += self.order
@@ -140,11 +150,13 @@ class UnoBoard(Board):
                     for index in range(len(legal_plays)):
                         print(f"{index + 1}) {legal_plays[index]}")
 
-                        #As seen on https://stackoverflow.com/questions/27993962/how-to-check-user-input-python
+                        # As seen on https://stackoverflow.com/questions/27993962/how-to-check-user-input-python
                     while True:
                         inp = input("Choose a card: ")
                         try:
-                            self.active_card = legal_plays[int(inp) -1] # try cast to int
+                            self.active_card = legal_plays[
+                                int(inp) - 1
+                            ]  # try cast to int
                             break
                         except:
                             # if we get here user entered invalid input so print message and ask again
@@ -156,25 +168,41 @@ class UnoBoard(Board):
 
             if self.active_card.value == "+2":
                 if active_player + self.order < 0:
-                    self.players[len(self.players) - 1].hand.cards.append(self.deck.draw())
-                    self.players[len(self.players) - 1].hand.cards.append(self.deck.draw())
+                    self.players[len(self.players) - 1].hand.cards.append(
+                        self.deck.draw()
+                    )
+                    self.players[len(self.players) - 1].hand.cards.append(
+                        self.deck.draw()
+                    )
                     "Reverse turn order",
                 elif active_player + self.order >= len(self.players):
                     self.players[0].hand.cards.append(self.deck.draw())
                     self.players[0].hand.cards.append(self.deck.draw())
                 else:
-                    self.players[active_player + self.order].hand.cards.append(self.deck.draw())
-                    self.players[active_player + self.order].hand.cards.append(self.deck.draw())
+                    self.players[active_player + self.order].hand.cards.append(
+                        self.deck.draw()
+                    )
+                    self.players[active_player + self.order].hand.cards.append(
+                        self.deck.draw()
+                    )
             elif self.active_card.value == "Skip turn":
                 active_player += self.order
             elif self.active_card.value == "Reverse turn order":
                 self.order *= -1
             elif self.active_card.value == "+4":
                 if active_player + self.order < 0:
-                    self.players[len(self.players) - 1].hand.cards.append(self.deck.draw())
-                    self.players[len(self.players) - 1].hand.cards.append(self.deck.draw())
-                    self.players[len(self.players) - 1].hand.cards.append(self.deck.draw())
-                    self.players[len(self.players) - 1].hand.cards.append(self.deck.draw())
+                    self.players[len(self.players) - 1].hand.cards.append(
+                        self.deck.draw()
+                    )
+                    self.players[len(self.players) - 1].hand.cards.append(
+                        self.deck.draw()
+                    )
+                    self.players[len(self.players) - 1].hand.cards.append(
+                        self.deck.draw()
+                    )
+                    self.players[len(self.players) - 1].hand.cards.append(
+                        self.deck.draw()
+                    )
                     "Reverse turn order",
                 elif active_player + self.order >= len(self.players):
                     self.players[0].hand.cards.append(self.deck.draw())
@@ -182,14 +210,26 @@ class UnoBoard(Board):
                     self.players[0].hand.cards.append(self.deck.draw())
                     self.players[0].hand.cards.append(self.deck.draw())
                 else:
-                    self.players[active_player + self.order].hand.cards.append(self.deck.draw())
-                    self.players[active_player + self.order].hand.cards.append(self.deck.draw())
-                    self.players[active_player + self.order].hand.cards.append(self.deck.draw())
-                    self.players[active_player + self.order].hand.cards.append(self.deck.draw())
+                    self.players[active_player + self.order].hand.cards.append(
+                        self.deck.draw()
+                    )
+                    self.players[active_player + self.order].hand.cards.append(
+                        self.deck.draw()
+                    )
+                    self.players[active_player + self.order].hand.cards.append(
+                        self.deck.draw()
+                    )
+                    self.players[active_player + self.order].hand.cards.append(
+                        self.deck.draw()
+                    )
 
-                self.active_card = UnoCard(choice(["red", "yellow", "green", "blue"]), "+4")
+                self.active_card = UnoCard(
+                    choice(["red", "yellow", "green", "blue"]), "+4"
+                )
             elif self.active_card.value == "Change color":
-                 self.active_card = UnoCard(choice(["red", "yellow", "green","blue"]), "Change color")
+                self.active_card = UnoCard(
+                    choice(["red", "yellow", "green", "blue"]), "Change color"
+                )
 
             if len(player.hand.cards) == 1:
                 print("Uno!")

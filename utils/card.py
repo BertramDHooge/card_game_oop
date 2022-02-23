@@ -93,7 +93,9 @@ class Deck:
 
         return deck
 
-    def fill_deck_default(self,):
+    def fill_deck_default(
+        self,
+    ):
         """
         Function that will fill the current deck with a standard list of Cards.
         """
