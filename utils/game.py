@@ -31,7 +31,7 @@ class Board:
         if self.deck.cards == []:
             self.deck.fill_deck_default()
 
-        deck.shuffle()
+        self.deck.shuffle()
         decks = self.deck.distribute(len(self.players))
 
         for index in range(len(self.players)):
