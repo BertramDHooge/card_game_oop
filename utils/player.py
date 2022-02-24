@@ -67,14 +67,10 @@ class ControlledPlayer(Player):
         while True:
             inp = input("Choose a card: ")
             try:
-                choice = self.legal_plays.cards[
-                        int(inp) - 1
-                ]  # try cast to int
+                choice = self.legal_plays.cards[int(inp) - 1]  # try cast to int
                 self.hand.cards.remove(choice)
                 return choice
             except:
                 # if we get here user entered invalid input so print message and ask again
                 print("{} is not a valid option".format(inp))
                 continue
-
-
