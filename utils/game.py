@@ -116,54 +116,20 @@ class UnoBoard(Board):
             if self.active_card is not None:
                 print(f"The active card is {self.active_card}")
 
-            legal_plays = [
+            player.legal_plays.cards = [
                 card
                 for card in player.hand.cards
                 if card.is_legal_play(self.active_card)
             ]
 
-            if player.is_ai:
-                if legal_plays != []:
-                    self.active_card = choice(legal_plays)
-                else:
-                    print(f"{player.name} has no legal plays and draws a card.")
-                    player.hand.cards.append(self.deck.draw())
-                    active_player += self.order
-                    continue
+            if player.legal_plays.cards != []:
+                self.active_card = player.play()
             else:
+                print(f"{player.name} has no legal plays and draws a card.")
+                player.hand.cards.append(self.deck.draw())
+                active_player += self.order
+                continue
 
-                print(
-                    "Your turn! Please select a legal card to play, otherwise, draw a card"
-                )
-                print("Your hand: ")
-                print([card.__str__() for card in player.hand.cards])
-                if legal_plays == []:
-
-                    print(
-                        "You don't seem to have any legal plays right now. Draw a card."
-                    )
-                    input("Press Enter to continue...")
-                    player.hand.cards.append(self.deck.draw())
-                    active_player += self.order
-                    continue
-                else:
-                    for index in range(len(legal_plays)):
-                        print(f"{index + 1}) {legal_plays[index]}")
-
-                        # As seen on https://stackoverflow.com/questions/27993962/how-to-check-user-input-python
-                    while True:
-                        inp = input("Choose a card: ")
-                        try:
-                            self.active_card = legal_plays[
-                                int(inp) - 1
-                            ]  # try cast to int
-                            break
-                        except:
-                            # if we get here user entered invalid input so print message and ask again
-                            print("{} is not a valid option".format(inp))
-                            continue
-
-            player.play(self.active_card)
             self.deck.cards.append(self.active_card)
 
             if self.active_card.value == "+2":

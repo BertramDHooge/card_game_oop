@@ -1,5 +1,5 @@
 from utils.game import Board, UnoBoard
-from utils.player import Player
+from utils.player import Player, ControlledPlayer
 from utils.card import Deck, Card
 
 players = []
@@ -7,7 +7,7 @@ deck = Deck()
 game = None
 
 name = input("Please insert your name: ")
-players.append(Player(name, Deck()))
+players.append(ControlledPlayer(name, Deck()))
 
 answer = input("Would you like to add another player? (y/n)")[0]
 
@@ -30,7 +30,8 @@ if game_input.lower() != "standard" and game_input.lower() != "uno":
     game = Board(players, deck)
 
 else:
-    players[0].is_ai = input("Do you want to play yourself?(y/n)").lower() == "n"
+    if input("Do you want to play yourself?(y/n)").lower() == "n":
+        players[0] = Player(players[0].name, players[0].hand)
 
     game = UnoBoard(players)
 
